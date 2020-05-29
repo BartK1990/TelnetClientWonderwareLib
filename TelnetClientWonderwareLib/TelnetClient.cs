@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Security.Cryptography.X509Certificates;
+using System.Text;
 
 namespace TelnetClientWonderwareLib
 {
@@ -32,6 +33,8 @@ namespace TelnetClientWonderwareLib
         public string Login_SendCommand_Disconnect(string username, string password, string command)
         {
             StringBuilder sb = new StringBuilder();
+            _tcpConnection.Connect();
+            if (!_tcpConnection.Connected) return "Connection failure";
             sb.Append(Login(username, password));
             WriteLine(command);
             sb.AppendLine(Read());
@@ -41,7 +44,6 @@ namespace TelnetClientWonderwareLib
 
         public string Login(string username, string password)
         {
-            _tcpConnection.Connect();
             StringBuilder sb = new StringBuilder();
             sb.AppendLine(Read());
             if (!sb.ToString().TrimEnd().EndsWith(":"))
