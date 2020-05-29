@@ -28,14 +28,13 @@ namespace TelnetClientWonderwareLib
             if (IPAddress.TryParse(ipAddress, out IPAddress ip))
             {
                 _ipServerAddress = ip;
-                Console.WriteLine("Ip address Set");
+                // Ip address Set
                 _ipAddressSet = true;
                 return 0;
             }
             else
             {
-                Console.WriteLine("Ip address setting fault");
-                return 1;
+                throw new Exception("Ip address setting fault");
             }
         }
 
@@ -44,32 +43,22 @@ namespace TelnetClientWonderwareLib
             if ((ipPort >= 0) && (ipPort <= 65535))
             {
                 _ipServerPort = ipPort;
-                Console.WriteLine("Ip Port set");
+                // Ip Port set
                 _ipPortSet = true;
                 return 0;
             }
             else
             {
-                Console.WriteLine("Ip Port setting fault");
-                return 1;
+                throw new Exception("Ip Port setting fault");
             }
         }
 
         public void Connect()
         {
-            try
+            if (IsIpPortAndAddressSet)
             {
-                if (IsIpPortAndAddressSet)
-                {
-                    _client = new TcpClient();
-                    _client.Connect(_ipServerAddress, _ipServerPort);
-
-                    Console.WriteLine("Connected. IP: {_ipServerAddress.ToString()} ipPort: {_ipServerPort}");
-                }
-            }
-            catch
-            {
-                Console.WriteLine($"Connection error at IP: {_ipServerAddress.ToString()} ipPort: {_ipServerPort}");
+                _client = new TcpClient();
+                _client.Connect(_ipServerAddress, _ipServerPort);
             }
         }
 
@@ -82,24 +71,23 @@ namespace TelnetClientWonderwareLib
                     if (_client.Connected)
                     {
                         _client.Close();
-                        Console.WriteLine("Disconnected successfully");
                         return 0;
                     }
                     else
                     {
-                        Console.WriteLine("Client was not connected");
+                        // Client was not connected
                         return 1;
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Connection client not created");
+                    // Connection client not created
                     return 2;
                 }
             }
             catch
             {
-                Console.WriteLine("Disconnection failure");
+                // Disconnection failure
                 return 3;
             }
         }
