@@ -43,14 +43,14 @@ namespace TelnetClientWonderwareLib
         {
             _tcpConnection.Connect();
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"R: {Read()}");
+            sb.AppendLine(Read());
             if (!sb.ToString().TrimEnd().EndsWith(":"))
             {
                 sb.AppendLine("Failed to connect : no login prompt");
                 return sb.ToString();
             }
             WriteLine(username);
-            sb.AppendLine($"R: {Read()}");
+            sb.AppendLine(Read());
             if (!sb.ToString().TrimEnd().EndsWith(":"))
             {
                 sb.AppendLine("Failed to connect : no password prompt");
@@ -58,7 +58,7 @@ namespace TelnetClientWonderwareLib
             }
             WriteLine(password);
             System.Threading.Thread.Sleep(_loginTimeoutMs);
-            sb.AppendLine($"R: {Read()}");
+            sb.AppendLine(Read());
             return sb.ToString();
         }
 
